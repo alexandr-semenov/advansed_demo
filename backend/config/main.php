@@ -43,6 +43,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                ['pattern' => 'customers', 'route' => 'customer/index', 'verb' => ['GET']],
+                ['pattern' => 'customers', 'route' => 'customer/create-from-array', 'verb' => ['POST']],
+                ['pattern' => 'customers/json', 'route' => 'customer/create-from-json', 'verb' => ['POST']],
             ],
         ],
         'db' => [
@@ -73,9 +76,31 @@ return [
             'Symfony\Component\Validator\Validator\ValidatorInterface' => function () {
                 return Symfony\Component\Validator\Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
             },
+
             'Psr\Log\LoggerInterface' => function () {
                 return \backend\helper\Monolog\MonologBuilder::build();
             },
+
+            'Twig\Environment' => function () {
+                $loader = new \Twig\Loader\FilesystemLoader(__DIR__.'/../templates/');
+                $twig = new \Twig\Environment($loader,
+                    [
+                        'cache' => __DIR__.'/../runtime/twig/compilation_cache',
+                        'debug' => true,
+                    ]
+                );
+                $twig->addExtension(new \Twig\Extension\DebugExtension());
+
+                return $twig;
+            },
+
+            'backend\utils\TransformData\TransformDataInterface' => [
+                ['class' => 'backend\utils\TransformData\TransformRequestForm'],
+                [
+                    \yii\di\Instance::of('JmsSerializer'),
+                    \yii\di\Instance::of('Symfony\Component\Validator\Validator\ValidatorInterface'),
+                ]
+            ],
         ],
     ],
     'params' => $params,

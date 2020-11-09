@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace backend\dto;
+namespace backend\models\Customer\Dto;
 
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class CustomerDto
  */
-class CustomerDto
+class CustomerDto implements DtoInterface
 {
     /**
      * @var int
@@ -71,4 +71,52 @@ class CustomerDto
      * @JMS\Type("string")
      */
     private $phone;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAge(): int
+    {
+        return $this->age;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
 }
